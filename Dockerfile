@@ -1,7 +1,5 @@
 FROM php:7.4-apache
 
-LABEL version 0.1.0
-
 # set the default environment variables
 ENV MYSQL_DATABASE wordpress
 ENV MYSQL_USER wordpress
