@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - stable
+services:
+  - docker
+
+script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - export VERSION="$(awk '$2 == "version" { print $3; exit }' Dockerfile)"
+  - docker build . -t iamfrisbee/wordpress:latest
+  - docker tag iamfrisbee/wordpress:latest "iamfrisbee/wordpress:${VERSION}"
+  - docker push iamfrisbee/wordpress:latest
+  - docker push "iamfrisbee/wordpress:${VERSION}"
