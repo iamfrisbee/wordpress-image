@@ -16,6 +16,14 @@ if [ ! -f .initialized ]; then
   sed -i "s/define('NONCE_SALT',\s*'put your unique phrase here');/define('NONCE_SALT', '`pwgen -1 -s 64`');/" wp-config.php
   echo "define('FS_METHOD', 'direct');" >> wp-config.php
 
+  if [ $PORT = "80" ]; then
+    echo "define( 'WP_HOME', 'http://localhost' );" >> wp-config.php
+    echo "define( 'WP_SITEURL', 'http://localhost' );" >> wp-config.php
+  else
+    echo "define( 'WP_HOME', 'http://localhost:$PORT' );" >> wp-config.php
+    echo "define( 'WP_SITEURL', 'http://localhost:$PORT' );" >> wp-config.php
+  fi
+
   echo 'Updating apache conf'
 
   sed -i s/:80/:$PORT/ /etc/apache2/sites-available/*.conf
