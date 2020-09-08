@@ -4,11 +4,8 @@ FROM php:7.4-apache
 ENV MYSQL_DATABASE wordpress
 ENV MYSQL_USER wordpress
 ENV MYSQL_PASSWORD iekalj4h2e3hi
-
-# open the port
-EXPOSE 80
-
-# install certbot requirements
+ENV PORT 80
+ENV SSL_PORT 443
 
 # install WordPress Requirements
 RUN apt-get update -y && apt-get install -y wget gettext imagemagick libmagickwand-dev pwgen libzip-dev
