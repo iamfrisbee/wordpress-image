@@ -53,7 +53,7 @@ FROM git as wordpress
 WORKDIR /var/www/html
 
 # copy needed files
-COPY htaccess.txt .htaccess
+COPY ./source/htaccess.txt .htaccess
 
 # download wordpress
 RUN wget -O wordpress.tar.gz https://wordpress.org/wordpress-6.2.tar.gz
@@ -75,7 +75,7 @@ RUN rm wordpress.tar.gz \
 FROM wordpress
 
 # add the entry point file
-COPY docker-entrypoint.sh /usr/local/bin/
+COPY ./source/docker-entrypoint.sh /usr/local/bin/
 
 # fix permissions
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
