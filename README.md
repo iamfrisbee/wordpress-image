@@ -2,6 +2,10 @@
 
 This image can be used to quickly standup a wordpress site locally.
 
+## Mount directories
+
+Mount the directories that are custom in your environment like plugins or themes to `/var/www/html`. For example, if you are trying to do theme development, you can mount your themes folder to `./themes:/var/www/html/themes`
+
 ## Environment variables
 
 All environment variables are optional and likely not needed if you are just developing locally.

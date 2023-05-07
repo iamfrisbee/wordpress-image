@@ -56,7 +56,7 @@ WORKDIR /var/www/html
 COPY htaccess.txt .htaccess
 
 # download wordpress
-RUN wget -O wordpress.tar.gz https://wordpress.org/latest.tar.gz
+RUN wget -O wordpress.tar.gz https://wordpress.org/wordpress-6.2.tar.gz
 
 # extract wordpress
 RUN tar -zxf wordpress.tar.gz --strip-components 1
