@@ -1,0 +1,16 @@
+name: deploy-to-docker
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: https://hub.docker.com/api/build/v1/source/91857f5b-795d-46f4-8989-3a6173833b4b/trigger/07e19976-7243-4755-822e-c63983093311/call/
+          method: "POST"

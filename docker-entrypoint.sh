@@ -38,9 +38,11 @@ if [ ! -f /src/.initialized ]; then
   if [ $PORT = "80" ]; then
     echo "define( 'WP_HOME', 'http://localhost' );" >> wp-config.php
     echo "define( 'WP_SITEURL', 'http://localhost' );" >> wp-config.php
+    mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "UPDATE ${PREFIX}options SET option_value='http://localhost' WHERE option_name in ('home', 'siteurl');"
   else
     echo "define( 'WP_HOME', 'http://localhost:$PORT' );" >> wp-config.php
     echo "define( 'WP_SITEURL', 'http://localhost:$PORT' );" >> wp-config.php
+    mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "UPDATE ${PREFIX}options SET option_value='http://localhost:${PORT}' WHERE option_name in ('home', 'siteurl');"
   fi
 
   echo 'Updating apache conf'
@@ -51,6 +53,10 @@ if [ ! -f /src/.initialized ]; then
   sed -i s/443/$SSL_PORT/ /etc/apache2/ports.conf
 
   touch /src/.initialized
+fi
+
+if [ "$RESET_ADMIN" == "1" ]; then
+  mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" -e "UPDATE ${PREFIX}users SET user_login='admin', user_pass=MD5('changeme') WHERE id=1;"
 fi
 
 exec apache2-foreground

@@ -13,6 +13,7 @@ MYSQL_USER | username to connect to db | wordpress
 MYSQL_PASSWORD | password to use to connect to db | iekalj4h2e3hi
 PREFIX | WordPress table prefix | wp_
 PORT | HTTP port for Apache | 80
+RESET_ADMIN | Updates the primary user login to admin with a password of changeme when the value is 1 | **blank**
 
 ## Restoring Your Existing Database
 
