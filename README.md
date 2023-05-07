@@ -1,6 +1,6 @@
 # WordPress Image
 
-This image can be used to quickly standup a wordpress site locally. Use the [https://github.com/iamfrisbee/wordpress-image/blob/master/wordpress/docker-compose.yml](docker-compose.yml) to help setup a quick environment to run WordPress locally.
+This image can be used to quickly standup a wordpress site locally. Use the [wordpress directory](https://github.com/iamfrisbee/wordpress-image/tree/master/wordpress) to help setup a quick environment to run WordPress locally.
 
 ## Mount directories
 
