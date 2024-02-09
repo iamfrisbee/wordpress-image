@@ -1,4 +1,4 @@
-FROM php:7.4-apache as base
+FROM php:8.2-apache as base
 
 # set the default environment variables
 ENV MYSQL_DATABASE wordpress
@@ -35,8 +35,8 @@ RUN docker-php-source extract \
 FROM base as mysql
 RUN mkdir -p /src/mysql && \
   cd /src/mysql && \
-  wget https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb && \
-  apt install -y ./mysql-apt-config_0.8.22-1_all.deb && \
+  wget https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb && \
+  apt install -y ./mysql-apt-config_0.8.29-1_all.deb && \
   apt-get update && apt-get install -y mysql-server
 
 FROM mysql as git
