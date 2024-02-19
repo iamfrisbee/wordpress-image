@@ -1,21 +1,12 @@
-FROM php:8.2-apache as base
+FROM php:8.2-apache
 
-# set the default environment variables
-ENV MYSQL_DATABASE wordpress
-ENV MYSQL_USER wordpress
-ENV MYSQL_PASSWORD iekalj4h2e3hi
-ENV PREFIX wp_
-ENV PORT 80
-ENV SSL_PORT 443
+WORKDIR /var/www/html
 
-ENV DEBIAN_FRONTEND noninteractive
-
-# create directory for mysql database restores
-RUN mkdir -p /src/db
-
-# install WordPress Requirements
-RUN apt-get update -y && \
-  apt-get install -y sudo wget gettext imagemagick libmagickwand-dev pwgen libzip-dev make libssl-dev libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev unzip
+# install dependencies
+RUN apt-get update -y \
+  && apt-get install -y wget libjpeg62-turbo-dev libpng-dev libfreetype-dev gettext \
+  imagemagick libmagickwand-dev pwgen libzip-dev make libssl-dev libghc-zlib-dev \
+  libcurl4-gnutls-dev libexpat1-dev unzip
 
 # enable mod rewrite
 RUN a2enmod rewrite
@@ -29,53 +20,23 @@ RUN docker-php-source extract \
   && docker-php-ext-install mysqli \
   && docker-php-ext-enable imagick \
   && docker-php-ext-install zip \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
   && docker-php-source delete
 
-
-FROM base as mysql
-RUN mkdir -p /src/mysql && \
-  cd /src/mysql && \
-  wget https://dev.mysql.com/get/mysql-apt-config_0.8.29-1_all.deb && \
-  apt install -y ./mysql-apt-config_0.8.29-1_all.deb && \
-  apt-get update && apt-get install -y mysql-server
-
-FROM mysql as git
-RUN mkdir -p /src/git && \
-  cd /src/git && \
-  wget https://github.com/git/git/archive/refs/heads/master.zip && \
-  unzip master.zip && \
-  cd git-master && \
-  make prefix=/usr/local all && \
-  make prefix=/usr/local install
-
-FROM git as wordpress
-# set the working directory
-WORKDIR /var/www/html
-
-# copy needed files
-COPY ./source/htaccess.txt .htaccess
-
 # download wordpress
-RUN wget -O wordpress.tar.gz https://wordpress.org/wordpress-6.2.tar.gz
-
-# extract wordpress
-RUN tar -zxf wordpress.tar.gz --strip-components 1
+RUN wget https://wordpress.org/latest.zip \
+  && unzip latest.zip \
+  && mv wordpress/* ./ \
+  && rmdir wordpress
 
 # fix permissions
 RUN chown -R www-data:www-data *
 
-# delete the garbage
-RUN rm wordpress.tar.gz \
-  && rm readme.html \
-  && rm wp-content/plugins/hello.php \
-  && rm -Rf wp-content/plugins/akismet \
-  && rm -Rf wp-content/themes/twentyseventeen \
-  && rm -Rf wp-content/themes/twentynineteen
-
-FROM wordpress
-
 # add the entry point file
-COPY ./source/docker-entrypoint.sh /usr/local/bin/
+COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+# add the generic .htaccess
+COPY ./htaccess.txt /var/www/html/.htaccess
 
 # fix permissions
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
