@@ -1,5 +1,13 @@
 FROM php:8.2-apache
 
+ENV APACHE_PORT=80
+ENV MYSQL_HOST=localhost
+ENV MYSQL_DATABASE=wordpress
+ENV MYSQL_USER=wordpress
+ENV MYSQL_PASSWORD=iekalj4h2e3hi
+ENV WP_PREFIX=wp_
+
+
 WORKDIR /var/www/html
 
 # install dependencies
